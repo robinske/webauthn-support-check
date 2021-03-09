@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>WebAuthn Support Check</title>
+    <meta name="description" content="WebAuthn Support Check" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 800px;
+        padding: 10px;
+        font-family: Helvetica, sans-serif;
+      }
+
+      .alert {
+        padding: 15px;
+        margin-top: 10px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+      }
+
+      .success {
+        border-color: #bce8f1;
+        color: #31708f;
+        background-color: #d9edf7;
+      }
+
+      .warning {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Check WebAuthn Support</h1>
+      <p id="available" class="hidden alert success">
+        [1] WebAuthn supported and Platform Authenticator found!
+      </p>
+      <p id="pa-unavailable" class="hidden alert warning">
+        [2] WebAuthn supported but Platform Authenticator (i.e. Windows Hello)
+        is not supported on this device.
+      </p>
+      <p id="unavailable" class="hidden alert warning">
+        [3] WebAuthn not supported on this device and/or browser.
+      </p>
+      <h3>User Agent</h3>
+      <p id="ua"></p>
+    </main>
+    <script>
+      document.querySelector("#ua").textContent = window.navigator.userAgent;
+
+      if (window.PublicKeyCredential) {
+        PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().then(
+          (uvpaa) => {
+            if (uvpaa) {
+              document.querySelector("#available").classList.remove("hidden");
+
+              console.log(uvpaa);
+            } else {
+              document
+                .querySelector("#pa-unavailable")
+                .classList.remove("hidden");
+            }
+          }
+        );
+      } else {
+        document.querySelector("#unavailable").classList.remove("hidden");
+      }
+    </script>
+  </body>
+</html>
