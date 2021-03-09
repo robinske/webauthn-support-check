@@ -46,7 +46,7 @@
       </p>
       <p id="pa-unavailable" class="hidden alert warning">
         [2] WebAuthn supported but Platform Authenticator (i.e. Windows Hello)
-        is not supported on this device.
+        is *not* supported on this device.
       </p>
       <p id="unavailable" class="hidden alert warning">
         [3] WebAuthn not supported on this device and/or browser.
@@ -59,11 +59,9 @@
 
       if (window.PublicKeyCredential) {
         PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().then(
-          (uvpaa) => {
-            if (uvpaa) {
+          (available) => {
+            if (available) {
               document.querySelector("#available").classList.remove("hidden");
-
-              console.log(uvpaa);
             } else {
               document
                 .querySelector("#pa-unavailable")
